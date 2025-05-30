@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Student;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class StudentController extends Controller
 {
@@ -11,7 +13,23 @@ class StudentController extends Controller
      */
     public function index()
     {
-        return "index";
+        $fields = request()->validate([
+            "course_id" => "integer|min:1",
+            "last_name" => "string|max:100"
+        ]);
+
+        $query = Student::query();
+
+        if (isset($fields['last_name'])) {
+            $query->where("last_name", "like", $fields['last_name'] . "%");
+        }
+        if (isset($fields['course_id'])) {
+            $query->where("course_id", $fields['course_id']);
+        }
+
+        $students = $query->paginate(30);
+
+        return response()->json($students);
     }
 
     /**
