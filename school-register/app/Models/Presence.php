@@ -9,4 +9,10 @@ class Presence extends Model
 {
     /** @use HasFactory<\Database\Factories\PresenceFactory> */
     use HasFactory;
+
+    protected $fillable = [
+        "student_id",
+        "is_present",
+        "date",
+    ];
 }
